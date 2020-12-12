@@ -1,10 +1,9 @@
-package com.amosgross.cloud.raplacalendarconverter.caldav;
+package com.amosgross.cloud.raplacalendarconverter.calendar;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.component.VEvent;
-import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
@@ -23,11 +22,13 @@ public class CalDavClient {
     public void connect() throws CalDAV4JException {
         HttpClient httpClient = new HttpClient();
 
-        httpClient.getHostConfiguration().setHost(CalDavCredentials.serverHost, 443, "https");
+        httpClient.getHostConfiguration().setHost(CalDavCredentials.serverHost, 80, "http");
         String username = CalDavCredentials.serverUserName;
         UsernamePasswordCredentials httpCredentials = new UsernamePasswordCredentials(username, CalDavCredentials.serverPassword);
         httpClient.getState().setCredentials(AuthScope.ANY, httpCredentials);
         httpClient.getParams().setAuthenticationPreemptive(true);
+
+        System.out.println("CLIENT: " + httpClient.getParams());
 
 
         CalDAVCollection collection = new CalDAVCollection(
@@ -40,6 +41,8 @@ public class CalDavClient {
         GenerateQuery gq = new GenerateQuery();
         // TODO you might want to adjust the date
         gq.setFilter("VEVENT [20200101T000000Z;20201231T000000Z] : STATUS!=CANCELLED");
+
+
 
         // Get the raw caldav query
          System.out.println("Query: "+ gq.prettyPrint());
