@@ -12,6 +12,5 @@ class CalDavClientTest {
     @Test
     void connect() {
         calDavClient.getCalendarItems();
-        calDavClient.connect();
     }
 }
