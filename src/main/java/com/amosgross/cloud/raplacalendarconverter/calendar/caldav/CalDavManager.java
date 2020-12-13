@@ -56,4 +56,15 @@ public class CalDavManager {
         return differences;
     }
 
+    public void updateCalendar(){
+        LectureDifferences differences = getNeededLectureUpdates();
+
+        for (Lecture lecture : differences.getLecturesToCreate()){
+            client.createCalendarItem(lecture);
+        }
+
+        for (Lecture lecture : differences.getLecturesToDelete()){
+            client.removeCalendarItem(lecture);
+        }
+    }
 }
