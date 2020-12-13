@@ -1,5 +1,6 @@
 package com.amosgross.cloud.raplacalendarconverter.models;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Lecture {
@@ -7,12 +8,14 @@ public class Lecture {
     private final String lecturer;
     private final LocalTime startTime;
     private final LocalTime endTime;
+    private final LocalDate date;
 
-    public Lecture(String title, String lecturer, LocalTime startTime, LocalTime endTime) {
+    public Lecture(String title, String lecturer, LocalTime startTime, LocalTime endTime, LocalDate date) {
         this.title = title;
         this.lecturer = lecturer;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.date = date;
     }
 
     public String getTitle() {
@@ -29,5 +32,9 @@ public class Lecture {
 
     public LocalTime getEndTime() {
         return endTime;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 }

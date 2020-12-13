@@ -1,7 +1,6 @@
 package com.amosgross.cloud.raplacalendarconverter.webscraping;
 
 import com.amosgross.cloud.raplacalendarconverter.models.Lecture;
-import com.amosgross.cloud.raplacalendarconverter.models.LectureDay;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,7 +9,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Scraper {
     Document document;
@@ -25,19 +23,9 @@ public class Scraper {
         }
     }
 
-    public ArrayList<LectureDay> getLectureDaysFromPage(){
+    public ArrayList<Lecture> getLectureDaysFromPage(){
         ArrayList<Element> lecturesAsHtmlElements = getAllLecturesAsHtmlElements();
-        HashMap<String, LectureDay> lectureDays = new HashMap<>();
-
-
-        // populates Arraylist
-        lectureDays.put("Mo", new LectureDay(firstDateOfWeek.plusDays(0)));
-        lectureDays.put("Di", new LectureDay(firstDateOfWeek.plusDays(1)));
-        lectureDays.put("Mi", new LectureDay(firstDateOfWeek.plusDays(2)));
-        lectureDays.put("Do", new LectureDay(firstDateOfWeek.plusDays(3)));
-        lectureDays.put("Fr", new LectureDay(firstDateOfWeek.plusDays(4)));
-        lectureDays.put("Sa", new LectureDay(firstDateOfWeek.plusDays(5)));
-        lectureDays.put("So", new LectureDay(firstDateOfWeek.plusDays(6)));
+        ArrayList<Lecture> lectures = new ArrayList<>();
 
         for (Element element : lecturesAsHtmlElements){
             LocalTime[] times = getTimesForLectureElement(element);
@@ -45,22 +33,34 @@ public class Scraper {
                     getTitleFromElement(element),
                     getLecturerFromElement(element),
                     times[0],
-                    times[1]
+                    times[1],
+                    firstDateOfWeek.plusDays(numberOfDaysFromMonday(getDayOfWeekFromLectureElement(element)))
             );
-            lectureDays.get(getDayOfWeekFromLectureElement(element)).addLecture(lecture);
+            lectures.add(lecture);
         }
 
-        ArrayList<LectureDay> resultArray = new ArrayList<>();
+        return lectures;
+    }
 
-        resultArray.add(lectureDays.get("Mo"));
-        resultArray.add(lectureDays.get("Di"));
-        resultArray.add(lectureDays.get("Mi"));
-        resultArray.add(lectureDays.get("Do"));
-        resultArray.add(lectureDays.get("Fr"));
-        resultArray.add(lectureDays.get("Sa"));
-        resultArray.add(lectureDays.get("So"));
-
-        return resultArray;
+    private int numberOfDaysFromMonday(String day){
+        switch (day){
+            case "Mo":
+                return 0;
+            case "Di":
+                return 1;
+            case "Mi":
+                return 2;
+            case "Do":
+                return 3;
+            case "Fr":
+                return 4;
+            case "Sa":
+                return 5;
+            case "So":
+                return 6;
+            default:
+                throw new IllegalStateException("This date is unknown: " + day);
+        }
     }
 
     private String getTitleFromElement(Element element){
@@ -93,8 +93,4 @@ public class Scraper {
         return document.select("td[class=week_block]");
     }
 
-
-    private String getFullHTML(){
-        return document.html();
-    }
 }
