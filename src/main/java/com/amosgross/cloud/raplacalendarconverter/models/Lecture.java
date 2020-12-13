@@ -37,4 +37,10 @@ public class Lecture {
     public LocalDate getDate() {
         return date;
     }
+
+    @Override
+    public int hashCode() {
+        String uniqueIdentifier = title + lecturer + startTime.toString() + endTime.toString() + date.toString();
+        return uniqueIdentifier.hashCode();
+    }
 }
