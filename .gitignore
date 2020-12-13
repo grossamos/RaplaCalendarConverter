@@ -2,4 +2,4 @@
 /target/
 .idea
 RaplaCalendarConverter.iml
-/src/main/java/com/amosgross/cloud/raplacalendarconverter/calendar/CalDavCredentials.java
+src/main/java/com/amosgross/cloud/raplacalendarconverter/calendar/MyCalDavCredentials.java
