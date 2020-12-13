@@ -11,7 +11,6 @@ class CalDavManagerTest {
 
     @Test
     void getNeededLectureUpdates() {
-        calDavManager.getNeededLectureUpdates();
         calDavManager.updateCalendar();
     }
 }

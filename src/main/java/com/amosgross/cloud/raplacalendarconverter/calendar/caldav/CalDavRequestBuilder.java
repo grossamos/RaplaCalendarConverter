@@ -44,8 +44,8 @@ public class CalDavRequestBuilder {
                 "BEGIN:VEVENT\n" +
                 "SUMMARY:" + lecture.getTitle() + "\n" +
                 "DESCRIPTION:" + lecture.getLecturer() + "\n" +
-                "DTSTART;TZID=Europe/Berlin:" + date.getYear() + date.getMonthValue() + date.getDayOfMonth() + "T" + ((startTime.getHour() >= 10)? startTime.getHour(): "0" + startTime.getHour()) + (startTime.getMinute() >= 10? startTime.getMinute(): "0" + startTime.getMinute()) + (startTime.getSecond() >= 10? startTime.getSecond(): "0" + startTime.getSecond()) + "\n" +
-                "DTEND;TZID=Europe/Berlin:" + date.getYear() + date.getMonthValue() + date.getDayOfMonth() + "T" + ((endTime.getHour() >= 10)? endTime.getHour(): "0"+ endTime.getHour()) + (endTime.getMinute() >= 10? endTime.getMinute(): "0" + endTime.getMinute()) + (endTime.getSecond() >= 10? endTime.getSecond(): "0" + endTime.getSecond()) + "\n" +
+                "DTSTART;TZID=Europe/Berlin:" + generateTimeString(startTime, date) +
+                "DTEND;TZID=Europe/Berlin:" + generateTimeString(endTime, date)  +
                 "LOCATION:online\n" +
                 "END:VEVENT\n" +
                 "END:VCALENDAR";
@@ -55,6 +55,16 @@ public class CalDavRequestBuilder {
                 .setHeader("Content", "text/calendar; charset=utf-8")
                 .setEntity(new ByteArrayEntity(requestBody.getBytes(StandardCharsets.UTF_8)))
                 .build();
+    }
+
+    private static String generateTimeString(LocalTime startTime, LocalDate date){
+        return "" + date.getYear() +
+                (date.getMonthValue() >= 10? date.getMonthValue(): "0" + date.getMonthValue()) +
+                (date.getDayOfMonth() >= 10? date.getDayOfMonth(): "0" + date.getDayOfMonth()) +
+                "T" +
+                ((startTime.getHour() >= 10)? startTime.getHour(): "0" + startTime.getHour()) +
+                (startTime.getMinute() >= 10? startTime.getMinute(): "0" + startTime.getMinute()) +
+                (startTime.getSecond() >= 10? startTime.getSecond(): "0" + startTime.getSecond()) + "\n";
     }
 
     public static HttpUriRequest buildDeleteRequest(CalDavCredentials credentials, Lecture lecture){

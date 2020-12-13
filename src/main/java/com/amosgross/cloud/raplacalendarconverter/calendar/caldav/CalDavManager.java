@@ -27,7 +27,7 @@ public class CalDavManager {
         while (dateToScrape.getDayOfWeek() != DayOfWeek.MONDAY)
             dateToScrape = dateToScrape.minusDays(1);
         for (int i = 0; i < 12; i++) {
-            Scraper scraper = new Scraper(UrlBuilder.getUrl("20D", dateToScrape.plusDays(i * 7)), dateToScrape.plusDays(i));
+            Scraper scraper = new Scraper(UrlBuilder.getUrl("20D", dateToScrape.plusDays(i * 7)), dateToScrape.plusDays(i * 7));
             lecturesInRapla.addAll(scraper.getLectureDaysFromPage());
         }
 
@@ -48,7 +48,7 @@ public class CalDavManager {
             }
         }
         for (Lecture lecture : lecturesInCalendar){
-            if (!lectureInRaplaHashCodes.containsKey(lecture.hashCode())){
+            if (!lectureInRaplaHashCodes.containsKey(lecture.hashCode()) && lecture.getDate().isAfter(LocalDate.now())){
                 differences.addDeleteLecture(lecture);
             }
         }

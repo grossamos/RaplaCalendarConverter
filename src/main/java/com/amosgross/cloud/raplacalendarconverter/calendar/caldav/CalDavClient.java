@@ -44,7 +44,7 @@ public class CalDavClient {
         HttpUriRequest request = CalDavRequestBuilder.buildCreateRequest(davCredentials, lecture);
         try {
             CloseableHttpResponse response = httpClient.execute(request);
-            // System.out.println(EntityUtils.toString(response.getEntity()));
+             System.out.println(EntityUtils.toString(response.getEntity()));
         } catch (IOException e) {
             e.printStackTrace();
         }
