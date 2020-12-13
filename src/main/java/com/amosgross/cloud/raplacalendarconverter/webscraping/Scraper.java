@@ -71,6 +71,8 @@ public class Scraper {
 
     private String getLecturerFromElement(Element element){
         String lecturer = element.select("span.person").text();
+        if (lecturer.equals(""))
+            return lecturer;
         lecturer = lecturer.substring(0, lecturer.length() - 1);
         return lecturer;
     }
