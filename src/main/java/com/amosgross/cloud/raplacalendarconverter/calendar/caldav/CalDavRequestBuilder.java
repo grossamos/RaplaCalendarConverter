@@ -1,13 +1,18 @@
 package com.amosgross.cloud.raplacalendarconverter.calendar.caldav;
 
+import com.amosgross.cloud.raplacalendarconverter.models.Lecture;
+import org.apache.commons.httpclient.Credentials;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ByteArrayEntity;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Base64;
 
 public class CalDavRequestBuilder {
+    private static final Base64.Encoder base64Encoder = Base64.getEncoder();
     public static HttpUriRequest buildReportRequest(CalDavCredentials credentials){
         String requestBody =
                 "<c:calendar-query xmlns:d=\"DAV:\" xmlns:c=\"urn:ietf:params:xml:ns:caldav\">\n" +
@@ -20,16 +25,43 @@ public class CalDavRequestBuilder {
                         "    </c:filter>\n" +
                         "</c:calendar-query>";
 
-        Base64.Encoder base64Encoder = Base64.getEncoder();
 
         return RequestBuilder.create("REPORT")
-                .setUri("https://cloud.amosgross.com/remote.php/dav/calendars/Amos/test/")
-//                .setUri("https://nextcloud.dhbw-stuttgart.de/remote.php/dav/calendars/inf20038")
+                .setUri(credentials.getUrl())
                 .setHeader("Authorization", "Basic " + base64Encoder.encodeToString((credentials.getServerUserName() + ":" + credentials.getServerPassword()).getBytes(StandardCharsets.UTF_8)))
                 .setHeader("Depth", "1")
                 .setHeader("Prefer", "return-minimal")
                 .setHeader("Content", "application/xml; charset=utf-8")
                 .setEntity(new ByteArrayEntity(requestBody.getBytes(StandardCharsets.UTF_8)))
+                .build();
+    }
+    public static HttpUriRequest buildCreateRequest(CalDavCredentials credentials, Lecture lecture){
+        LocalDate date = lecture.getDate();
+        LocalTime startTime = lecture.getStartTime();
+        LocalTime endTime = lecture.getEndTime();
+        String requestBody =
+                "BEGIN:VCALENDAR\n" +
+                "BEGIN:VEVENT\n" +
+                "SUMMARY:" + lecture.getTitle() + "\n" +
+                "DESCRIPTION:" + lecture.getLecturer() + "\n" +
+                "DTSTART;TZID=Europe/Berlin:" + date.getYear() + date.getMonthValue() + date.getDayOfMonth() + "T" + ((startTime.getHour() >= 10)? startTime.getHour(): "0" + startTime.getHour()) + (startTime.getMinute() >= 10? startTime.getMinute(): "0" + startTime.getMinute()) + (startTime.getSecond() >= 10? startTime.getSecond(): "0" + startTime.getSecond()) + "\n" +
+                "DTEND;TZID=Europe/Berlin:" + date.getYear() + date.getMonthValue() + date.getDayOfMonth() + "T" + ((endTime.getHour() >= 10)? endTime.getHour(): "0"+ endTime.getHour()) + (endTime.getMinute() >= 10? endTime.getMinute(): "0" + endTime.getMinute()) + (endTime.getSecond() >= 10? endTime.getSecond(): "0" + endTime.getSecond()) + "\n" +
+                "LOCATION:online\n" +
+                "END:VEVENT\n" +
+                "END:VCALENDAR";
+        return RequestBuilder.create("PUT")
+                .setUri(credentials.getUrl() + lecture.hashCode() + ".ics")
+                .setHeader("Authorization", "Basic " + base64Encoder.encodeToString((credentials.getServerUserName() + ":" + credentials.getServerPassword()).getBytes(StandardCharsets.UTF_8)))
+                .setHeader("Content", "text/calendar; charset=utf-8")
+                .setEntity(new ByteArrayEntity(requestBody.getBytes(StandardCharsets.UTF_8)))
+                .build();
+    }
+
+    public static HttpUriRequest buildDeleteRequest(CalDavCredentials credentials, Lecture lecture){
+        return RequestBuilder.create("DELETE")
+                .setUri(credentials.getUrl() + lecture.hashCode() + ".ics")
+                .setHeader("Authorization", "Basic " + base64Encoder.encodeToString((credentials.getServerUserName() + ":" + credentials.getServerPassword()).getBytes(StandardCharsets.UTF_8)))
+                .setEntity(new ByteArrayEntity("".getBytes(StandardCharsets.UTF_8)))
                 .build();
     }
 }
