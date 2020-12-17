@@ -49,6 +49,7 @@ public class CalDavRequestBuilder {
                 "LOCATION:online\n" +
                 "END:VEVENT\n" +
                 "END:VCALENDAR";
+
         return RequestBuilder.create("PUT")
                 .setUri(credentials.getUrl() + lecture.hashCode() + ".ics")
                 .setHeader("Authorization", "Basic " + base64Encoder.encodeToString((credentials.getServerUserName() + ":" + credentials.getServerPassword()).getBytes(StandardCharsets.UTF_8)))

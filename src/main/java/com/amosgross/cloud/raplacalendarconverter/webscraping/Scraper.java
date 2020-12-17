@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -15,9 +16,13 @@ public class Scraper {
     LocalDate firstDateOfWeek;
 
     public Scraper(String url, LocalDate firstDateOfWeek) {
-        this.firstDateOfWeek = firstDateOfWeek;
+        this(url);
+    }
+
+    public Scraper(String url) {
         try {
             document = Jsoup.connect(url).get();
+            this.firstDateOfWeek = getDate(document);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,6 +66,64 @@ public class Scraper {
             default:
                 throw new IllegalStateException("This date is unknown: " + day);
         }
+    }
+
+    private LocalDate getDate(Element element){
+        int day = Integer.parseInt(element.select("select[name=day]").select("option[selected]").text());
+        String monthName = element.select("select[name=month]").select("option[selected]").text();
+        int year = Integer.parseInt(element.select("select[name=year]").select("option[selected]").text());
+        int month;
+
+        switch (monthName){
+            case "Januar":
+                month = 1;
+                break;
+            case "Februar":
+                month = 2;
+                break;
+            case "März":
+                month = 3;
+                break;
+            case "April":
+                month = 4;
+                break;
+            case "Mai":
+                month = 5;
+                break;
+            case "Juni":
+                month = 6;
+                break;
+            case "Juli":
+                month = 7;
+                break;
+            case "August":
+                month = 8;
+                break;
+            case "September":
+                month = 9;
+                break;
+            case "Oktober":
+                month = 10;
+                break;
+            case "November":
+                month = 11;
+                break;
+            case "Dezember":
+                month = 12;
+                break;
+            default:
+                throw new IllegalStateException("Month name not known: " + monthName);
+        }
+
+        LocalDate foundDate = LocalDate.of(year, month, day);
+
+        // always returns the monday of that week, as it is needed for correct date assessment
+        while (!(foundDate.getDayOfWeek() == DayOfWeek.MONDAY)){
+            foundDate = foundDate.minusDays(1);
+        }
+
+        System.out.println(foundDate);
+        return foundDate;
     }
 
     private String getTitleFromElement(Element element){
