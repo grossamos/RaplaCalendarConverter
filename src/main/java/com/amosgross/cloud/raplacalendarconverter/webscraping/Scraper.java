@@ -15,8 +15,10 @@ public class Scraper {
     Document document;
     LocalDate firstDateOfWeek;
 
+    @Deprecated
     public Scraper(String url, LocalDate firstDateOfWeek) {
         this(url);
+        System.out.println("WARNING:\tyour use of the date Parameter is Depreciated");
     }
 
     public Scraper(String url) {
@@ -33,13 +35,21 @@ public class Scraper {
         ArrayList<Lecture> lectures = new ArrayList<>();
 
         for (Element element : lecturesAsHtmlElements){
+            LocalDate dateOfLecture;
             LocalTime[] times = getTimesForLectureElement(element);
+            if (element.attributes().get("style").equals("background-color:#F79F81")){
+                dateOfLecture = firstDateOfWeek.plusDays(Long.parseLong(element.select("a[href]").attr("href").substring(1)));
+                System.out.println(dateOfLecture);
+            }
+            else {
+                dateOfLecture = firstDateOfWeek.plusDays(numberOfDaysFromMonday(getDayOfWeekFromLectureElement(element)));
+            }
             Lecture lecture = new Lecture(
                     getTitleFromElement(element),
                     getLecturerFromElement(element),
                     times[0],
                     times[1],
-                    firstDateOfWeek.plusDays(numberOfDaysFromMonday(getDayOfWeekFromLectureElement(element)))
+                    dateOfLecture
             );
             lectures.add(lecture);
         }
@@ -122,7 +132,6 @@ public class Scraper {
             foundDate = foundDate.minusDays(1);
         }
 
-        System.out.println(foundDate);
         return foundDate;
     }
 

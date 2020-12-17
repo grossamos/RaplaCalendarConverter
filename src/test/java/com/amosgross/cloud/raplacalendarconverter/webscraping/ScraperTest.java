@@ -12,8 +12,7 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ScraperTest {
-    Scraper scraper = new Scraper("https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJrog1ZNPBrE7IVuW7j2dZDqY8f6xFPQs3yRuH0p5-aHv&day=3&month=12&year=2020",
-            LocalDate.of(2020, 11, 30));
+    Scraper scraper = new Scraper("https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJrog1ZNPBrE7IVuW7j2dZDqY8f6xFPQs3yRuH0p5-aHv&day=4&month=3&year=2021");
 
 //    @Test
 //    void can_get_something_from_a_url(){
