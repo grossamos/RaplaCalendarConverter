@@ -24,10 +24,8 @@ public class CalDavManager {
 
         // gets all events for next 12 weeks
         LocalDate dateToScrape = LocalDate.now();
-        while (dateToScrape.getDayOfWeek() != DayOfWeek.MONDAY)
-            dateToScrape = dateToScrape.minusDays(1);
         for (int i = 0; i < 12; i++) {
-            Scraper scraper = new Scraper(UrlBuilder.getUrl("20D", dateToScrape.plusDays(i * 7)), dateToScrape.plusDays(i * 7));
+            Scraper scraper = new Scraper(UrlBuilder.getUrl("20D", dateToScrape.plusDays(i * 7)));
             lecturesInRapla.addAll(scraper.getLectureDaysFromPage());
         }
 

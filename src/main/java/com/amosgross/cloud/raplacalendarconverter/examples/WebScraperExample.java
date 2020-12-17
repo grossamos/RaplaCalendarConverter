@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class WebScraperExample {
     public static void main(String[] args) {
         LocalDate localDate = LocalDate.of(2020, 11, 30);
-        Scraper scraper = new Scraper(UrlBuilder.getUrl("20D", localDate), localDate);
+        Scraper scraper = new Scraper(UrlBuilder.getUrl("20D", localDate));
         ArrayList<Lecture> lectureDays = scraper.getLectureDaysFromPage();
 
 
