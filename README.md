@@ -39,7 +39,7 @@ It essentially consists out of two parts, a web scraper and a port for CalDav. T
     - initialize the Scraper:
     ```java
     LocalDate localDate = LocalDate.of(2020, 11, 30);
-    Scraper scraper = new Scraper(UrlBuilder.getUrl("20D", localDate), localDate);
+    Scraper scraper = new Scraper(UrlBuilder.getUrl("20D", localDate));
     ```
     - Get an ArrayList of LectureDays (a class containing all Lecture objects) call:
     ```java
