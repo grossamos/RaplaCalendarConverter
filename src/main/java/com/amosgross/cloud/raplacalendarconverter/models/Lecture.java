@@ -9,6 +9,7 @@ public class Lecture {
     private final LocalTime startTime;
     private final LocalTime endTime;
     private final LocalDate date;
+    private boolean isKlausur = false;
 
     public Lecture(String title, String lecturer, LocalTime startTime, LocalTime endTime, LocalDate date) {
         this.title = title;
@@ -16,6 +17,10 @@ public class Lecture {
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;
+    }
+    public Lecture(String title, String lecturer, LocalTime startTime, LocalTime endTime, LocalDate date, boolean isKlausur) {
+        this(title, lecturer, startTime, endTime, date);
+        this.isKlausur = isKlausur;
     }
 
     public String getTitle() {
@@ -36,6 +41,10 @@ public class Lecture {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public boolean isKlausur() {
+        return isKlausur;
     }
 
     @Override

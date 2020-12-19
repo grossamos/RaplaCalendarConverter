@@ -35,11 +35,12 @@ public class Scraper {
         ArrayList<Lecture> lectures = new ArrayList<>();
 
         for (Element element : lecturesAsHtmlElements){
+            boolean isKlausur = false;
             LocalDate dateOfLecture;
             LocalTime[] times = getTimesForLectureElement(element);
             if (element.attributes().get("style").equals("background-color:#F79F81")){
                 dateOfLecture = firstDateOfWeek.plusDays(Long.parseLong(element.select("a[href]").attr("href").substring(1)));
-                System.out.println(dateOfLecture);
+                isKlausur = true;
             }
             else {
                 dateOfLecture = firstDateOfWeek.plusDays(numberOfDaysFromMonday(getDayOfWeekFromLectureElement(element)));
@@ -49,7 +50,8 @@ public class Scraper {
                     getLecturerFromElement(element),
                     times[0],
                     times[1],
-                    dateOfLecture
+                    dateOfLecture,
+                    isKlausur
             );
             lectures.add(lecture);
         }
