@@ -1,7 +1,6 @@
 package com.amosgross.cloud.raplacalendarconverter.calendar.caldav;
 
 import com.amosgross.cloud.raplacalendarconverter.models.Lecture;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -44,7 +43,6 @@ public class CalDavClient {
         HttpUriRequest request = CalDavRequestBuilder.buildCreateRequest(davCredentials, lecture);
         try {
             CloseableHttpResponse response = httpClient.execute(request);
-             System.out.println(EntityUtils.toString(response.getEntity()));
         } catch (IOException e) {
             e.printStackTrace();
         }

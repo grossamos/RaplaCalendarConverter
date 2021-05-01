@@ -1,7 +1,6 @@
 package com.amosgross.cloud.raplacalendarconverter.calendar.caldav;
 
 import com.amosgross.cloud.raplacalendarconverter.models.Lecture;
-import org.apache.commons.httpclient.Credentials;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ByteArrayEntity;

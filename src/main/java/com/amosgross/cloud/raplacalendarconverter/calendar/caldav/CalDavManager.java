@@ -5,7 +5,6 @@ import com.amosgross.cloud.raplacalendarconverter.models.LectureDifferences;
 import com.amosgross.cloud.raplacalendarconverter.webscraping.Scraper;
 import com.amosgross.cloud.raplacalendarconverter.webscraping.UrlBuilder;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
